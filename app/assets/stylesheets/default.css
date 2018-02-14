@@ -1,3 +1,4 @@
+/* associated with the view and has globally declared functions or variables  */
 html, body {
   margin: 0;
   padding: 0;
@@ -12,12 +13,12 @@ div#main {
 }
 a {
   background: transparent;
-  color: maroon;
+  color: maroon; /* This changes the More Info words section and the add new movie */
   text-decoration: underline;
   font-weight: bold;
 }
 h1 {
-  color: maroon;
+  color: maroon; /* This changes the 'All Movies' header */
   font-size: 150%;
   font-style: italic;
   display: block;
@@ -37,15 +38,18 @@ table#movies {
   margin: 10px;
   border-collapse: collapse;
   width: 100%;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid black; /* This is for the solid long line running above 'Add new movie' */
 }
 table#movies th {
-  border: 2px solid white;
+  border: 2px solid white; /* This is for the boxing around the headers: Movie title, Rating, Release Date... */
   font-weight: bold;
   background-color: wheat;
 }
+table#movies th.hilite {
+  background-color: yellow;
+}
 table#movies th, table#movies td {
-  padding: 4px;
+  padding: 4px; /*spacing in between the all the table lines */
   text-align: left;
 }
 #notice #warning {

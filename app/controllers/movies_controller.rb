@@ -1,8 +1,14 @@
 class MoviesController < ApplicationController
-
+  
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
+  
+  # def initialize
+  #   @all_ratings = Movie.all_ratings
+  #   @all_ratings = ['G','PG','PG-13','R']
+  #   super
+  # end
 
   def show
     id = params[:id] # retrieve movie ID from URI route
@@ -10,9 +16,17 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
-  def index
-    @movies = Movie.all
-  end
+  def index 
+    #@movies = Movie.all 
+    #find([1,3]) - this finds the movies based on their id number 
+    #@all_ratings = ['G','PG','PG-13','R']
+    @sort_by = params[:sort]
+    if !@sort_by.nil?
+      @movies = Movie.order("#{@sort_by} ASC").all
+    else
+      @movies = Movie.all
+    end 
+  end 
 
   def new
     # default: render 'new' template
@@ -23,6 +37,8 @@ class MoviesController < ApplicationController
     flash[:notice] = "#{@movie.title} was successfully created."
     redirect_to movies_path
   end
+  #flash keeps track of particular information
+  #params, sessions not hashes
 
   def edit
     @movie = Movie.find params[:id]
@@ -34,12 +50,19 @@ class MoviesController < ApplicationController
     flash[:notice] = "#{@movie.title} was successfully updated."
     redirect_to movie_path(@movie)
   end
-
+  
   def destroy
     @movie = Movie.find(params[:id])
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
   end
-
+  
+  # def hilight(column)
+  #   if(session[:order].to_s == column)
+  #     return 'hilite'
+  #   else
+  #     return nil
+  #   end
+  # end
 end
