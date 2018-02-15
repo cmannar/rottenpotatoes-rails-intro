@@ -18,15 +18,29 @@ class MoviesController < ApplicationController
 
   def index 
     #@movies = Movie.all 
-    #find([1,3]) - this finds the movies based on their id number 
-    #@all_ratings = ['G','PG','PG-13','R']
     @sort_by = params[:sort]
-    if !@sort_by.nil?
-      @movies = Movie.order("#{@sort_by} ASC").all
+    @ratings = params[:ratings]
+    
+    if @ratings.nil?
+      ratings = Movie.ratings
     else
-      @movies = Movie.all
+      ratings = @ratings.keys
+      # keys that we put in the Movie.rb with p, pg, pg-13...
+    end
+      
+    if !@sort_by.nil?
+      @movies = Movie.order("#{@sort_by} ASC").where(:rating => ratings)
+    else
+      @movies = Movie.where(:rating => ratings)
     end 
+    
+    @all_ratings = Movie.ratings.inject(Hash.new) do | all_ratings, rating |
+      all_ratings[rating] = @ratings.nil? ? false : @ratings.has_key?(rating)
+      all_ratings
+    end
   end 
+#order is saying put it in this order, by ascending order
+#if statement is making sure that the database is not empty 
 
   def new
     # default: render 'new' template
