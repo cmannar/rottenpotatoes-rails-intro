@@ -18,8 +18,9 @@ class MoviesController < ApplicationController
 
   def index 
     #@movies = Movie.all 
-    @sort_by = params[:sort]
-    @ratings = params[:ratings]
+    @sort_by = params[:sort] || session[:sort]
+    @ratings = params[:ratings] || session[:ratings]
+    #first launch, session sort is empty and param sort might be empty, and as you choose to sort, they get data and they will remember
     
     if @ratings.nil?
       ratings = Movie.ratings
@@ -38,6 +39,16 @@ class MoviesController < ApplicationController
       all_ratings[rating] = @ratings.nil? ? false : @ratings.has_key?(rating)
       all_ratings
     end
+    
+    #This is where we are remembering it now:
+    session[:sort] = @sort_by
+    session[:ratings] = @ratings
+    
+    if params[:sort].nil? && params[:ratings].nil? && (!session[:sort].nil? || !session[:ratings].nil?)
+      flash.keep
+      redirect_to movies_path(:sort => session[:sort], :ratings => session[:ratings])
+    end
+    
   end 
 #order is saying put it in this order, by ascending order
 #if statement is making sure that the database is not empty 
